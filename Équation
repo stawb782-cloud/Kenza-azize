@@ -1,0 +1,46 @@
+#include<stdio.h>
+
+// Fonction pour calculer le PGCD avec l'algorithme d'Euclide
+int pgcd(int a, int b) {
+    int temp;
+    while (b != 0) {
+        temp = b;
+        b = a % b;
+        a = temp;
+    }
+    return a;
+}
+
+// Algorithme d’Euclide étendu
+int euclide_etendu(int a, int b, int *x, int *y) {
+    if (b == 0) {
+        *x = 1;
+        *y = 0;
+        return a;
+    }
+    int x1, y1;
+    int d = euclide_etendu(a, b, &x1, &y1);
+    *x = y1;
+    *y = x1 - (a / b) * y1;
+    return d;
+}
+
+int main() {
+    int a, b, c;
+    printf("Entrer les valeurs de a, b et c : ");
+    scanf("%d %d %d", &a, &b, &c);
+
+    int x0, y0;
+    int d = euclide_etendu(a, b, &x0, &y0);
+    if (c % d != 0) {
+        printf("Pas de solution entiere car %d ne divise pas %d.\n", d, c);
+    } else {
+        int x_part = x0 * (c / d);
+        int y_part = y0 * (c / d);
+        printf("Une solution particuliere : x = %d , y = %d\n", x_part, y_part);
+        printf("Solution generale :\n");
+        printf("x = %d + k*(%d),  y = %d - k*(%d),  k ∈ Z\n",
+               x_part, b / d, y_part, a / d);
+    }
+    return 0;
+}
